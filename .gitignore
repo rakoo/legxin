@@ -1,0 +1,7 @@
+/node_modules/
+/public/build/
+
+.DS_Store
+API_KEY
+credentials.json
+public/build
