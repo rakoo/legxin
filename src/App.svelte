@@ -75,14 +75,14 @@
 	 *  On load, called to load the auth2 library and API client library.
 	 */
 	function handleClientLoad() {
-		gapi.load('client:auth2');
+		gapi.load('client:auth2', handleAuth);
 	}
 
 	/**
 	 *  Initializes the API client library and sets up sign-in state
 	 *  listeners.
 	 */
-	async function handleAuthClick() {
+	async function handleAuth() {
 		// Array of API discovery doc URLs for APIs used by the quickstart
 		var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest"];
 
@@ -94,15 +94,12 @@
 			return;
 		}
 
-		console.log(`apiKey: [${apiKey}]`)
-		console.log(`clientId: [${clientId}]`)
 		gapi.client.init({
 			apiKey: apiKey,
 			clientId: clientId,
 			discoveryDocs: DISCOVERY_DOCS,
 			scope: SCOPES
 		}).then(() => {
-			console.log('will log');
 			// Listen for sign-in state changes.
 			gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
@@ -119,10 +116,8 @@
 	 *  appropriately. After a sign-in, the API is called.
 	 */
 	function updateSigninStatus(isSignedIn) {
-		console.log('isSignedIn : ' + isSignedIn);
 		if (isSignedIn) {
 			signedIn = true;
-			listLabels();
 		} else {
 			signedIn = false;
 		}
@@ -135,28 +130,6 @@
 		gapi.auth2.getAuthInstance().signOut();
 	}
 
-	/**
-	 * Print all Labels in the authorized user's inbox. If no labels
-	 * are found an appropriate message is printed.
-	 */
-	function listLabels() {
-		gapi.client.gmail.users.labels.list({
-			'userId': 'me'
-		}).then((response) => {
-			var labels = response.result.labels;
-			content = 'Labels: '
-
-			if (labels && labels.length > 0) {
-				for (var i = 0; i < labels.length; i++) {
-					var label = labels[i];
-					console.log(label.name)
-					content += '\n' + label.name
-				}
-			} else {
-				content = 'No Labels found.';
-			}
-		});
-	}
 </script>
 
 <main>
@@ -165,6 +138,7 @@
 
 	{#if signedIn}
 		<button on:click={handleSignoutClick}>Sign Out</button>
+		<Content gapi={gapi} signedIn={signedIn}/>
 	{:else}
 
 		<table border="1">
@@ -179,11 +153,9 @@
 				</tr>
 				<tr>
 					<th>Log in</th>
-					<td><button on:click={handleAuthClick}>Log In</button></td>
+					<td><button on:click={handleAuth}>Log In</button></td>
 				</tr>
 			</tbody>
 		</table>
 	{/if}
-
-	<Content/>
 </main>
