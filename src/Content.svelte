@@ -5,8 +5,8 @@
 	}
 
 	.item {
-		height: 300px;
-		width: 400px;
+		height: 200;
+		width: 600px;
 
 		margin-top: 10px;
 		color: #FFF;
@@ -32,7 +32,7 @@
 	}
 
 	.content {
-		height: 260px;
+		height: 160px;
 		display: grid;
 		grid-template-columns: 150px auto;
 		align-items: center;
