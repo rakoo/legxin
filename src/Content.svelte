@@ -5,14 +5,15 @@
 	}
 
 	.item {
-		height: 150px;
+		height: 160px;
 		width: 400px;
 
 		margin-top: 10px;
 		color: #FFF;
 		margin: 10px;
 		text-align: left;
-		font-size: 11px;
+		font-family: monospace;
+		font-size: 13px;
 		background-color: #111;
 		border: 10px double #87CBD4;
 
