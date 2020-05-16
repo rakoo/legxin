@@ -29,6 +29,17 @@
 	.titlebar {
 		font-weight: bold;
 		margin-top: 10px;
+		height: 12px;
+
+		display: grid;
+		grid-template-columns: auto auto;
+	}
+	.titlebar > * {
+		margin-top: 0px;
+	}
+
+	.flairs {
+		text-align: right;
 	}
 
 	.content {
@@ -70,12 +81,13 @@
 		waiting = false;
 	})
 
-	function titleWithAuthor(post) {
-		return post.title + "\n\n" + post.author.name
-	}
-
 	function thumbnailOrLink(post) {
 		return post.thumbnail == "self" || post.thumbnail == "default" || post.thumbnail == "image" ? "" : post.thumbnail
+	}
+
+	function flairs(post) {
+		console.log(post)
+		return post.link_flair_richtext.map(f => f.t).join(',').toUpperCase()
 	}
 </script>
 
@@ -85,7 +97,10 @@
 	{:else}
 		{#each posts as p, i}
 			<div class="item">
-				<div class=titlebar>/{p.subreddit_name_prefixed}/</div>
+				<div class=titlebar>
+					<p>/{p.subreddit_name_prefixed}/</p>
+					<p class="flairs">{flairs(p)}</p>
+				</div>
 				<div class=content>
 					<a href={p.url}>
 						<img src={thumbnailOrLink(p)} height={p.thumbnailHeight} width={p.thumbnailWidth} alt="">
