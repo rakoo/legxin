@@ -1,100 +1,98 @@
 <style>
-	.title {
-		font-size: 10pt;
-		line-height: 14pt;
+	.flex-container {
+		display: flex;
+		flex-wrap: wrap;
 	}
 
-	.dot {
-		min-width: 12px;
+	.item {
+		position: relative;
+		margin: 0px auto;
+
+		display: grid;
+		grid-template-columns: 200px auto;
 	}
 
-	.subtext {
-		font-size: 9pt;
+	.front {
+		height: 300px;
+		color: #FFF;
+		margin: 10px;
+		text-align: center;
+		font-size: 11px;
+		background-color: #111;
+		border: 3px solid #87CBD4;
+
+		grid-row-start: 2;
+		grid-row-end: 3;
+		grid-column-start: 1;
+		grid-column-end: 2;		
 	}
 
-	.spacer {
-		height: 5px;
+	.right {
+		width: 10px;
+		height: 300px;
+		background-color: #111;
+		border: 3px solid #87CBD4;
+
+		grid-row-start: 2;
+		grid-row-end: 3;
+		grid-column-start: 2;
+		grid-column-end: 3;
+
+		transform: skew(0deg, -50deg) translate(-10px, -2px);
+		transform-origin: bottom left;
 	}
+	
+	.top {
+		height: 12.6px;
+		width: 174.2px;
+		background-color: #111;
+		border: 3px solid #87CBD4;
+
+		grid-row-start: 1;
+		grid-row-end: 2;
+		grid-column-start: 1;
+		grid-column-end: 2;
+
+		transform: skew(-40deg, 0deg) translate(18px, 9.7px);
+		transform-origin: bottom left;
+	}
+
+	.content {
+		margin-top: 10px;
+	}
+
+
 </style>
 
 <script>
 	import { onMount } from 'svelte';
 
-	export let gapi;
-	export let signedIn;
+	export let r;
 
-	$: listLabels({signedIn})
+	let hot = [];
 
-	let allThreads = [];
-	let noThreadsForSure = false;
-
-	/**
-	 * Print all Labels in the authorized user's inbox. If no labels
-	 * are found an appropriate message is printed.
-	 */
-	function listLabels(signedIn) {
-		gapi.client.gmail.users.threads.list({
-			'userId': 'me',
-			'labelIds': ['INBOX', 'UNREAD']
-		}).then((response) => {
-			var threads = response.result.threads;
-			if (threads) {
-				for (var i = 0; i < threads.length; i++) {
-					addThread(threads[i].id);
-				}
-			} else {
-				noThreadsForSure = true
-			}
-		});
-	}
-
-	function addThread(threadId) {
-		gapi.client.gmail.users.threads.get({
-			'userId': 'me',
-			'id': threadId,
-			'format': 'metadata',
-			'metadataHeaders': ['SUBJECT', 'FROM', 'DATE']
-		}).then((response) => {
-			let thread = response.result;
-			if (thread) {
-				let lastMessage = thread.messages[thread.messages.length - 1];
-				let threadStruct = {
-					from: getValueOrDefault(lastMessage.payload.headers.filter((h) => h.name == "From")),
-					date: getValueOrDefault(lastMessage.payload.headers.filter((h) => h.name == "Date")),
-					subject: getValueOrDefault(lastMessage.payload.headers.filter((h) => h.name == "Subject")),
-				}
-				allThreads = [...allThreads, threadStruct];
-			}
-		})
-	}
-
-	function getValueOrDefault(u) {
-		if (u && u.length > 0) {
-			return u[0].value;
-		} else {
-			return ""
-		}
-	}
+	onMount(async () => {
+		hot = await r.getHot();
+		console.log(hot)
+	})
 
 </script>
 
-{#if allThreads.length > 0}
-	<table cellspacing="0" cellpadding="0" border="0">
-		{#each allThreads as thread, i}
-			<tr class="title">
-				<td class="dot">•</td>
-				<td></td>
-				<td>{thread.subject}</td>
-			</tr>
-			<tr>
-				<td colspan="2"></td>
-				<td class="subtext">by {thread.from} on {thread.date}</td>
-			</tr>
-			<tr class="spacer"></tr>
-		{/each}
-	</table>
-{:else if noThreadsForSure}
-	<p>No unread threads in inbox</p>
-{:else}
-	<p>Fetching...</p>
-{/if}
+<div class="flex-container">
+	{#each hot as p, i}
+		<div class="item">
+			<div class="front">
+				<div class="content">
+					<div>
+						<a href={p.url}>
+							<img src={p.thumbnail || ""} height={p.thumbnailHeight} width={p.thumbnailWidth} alt="">
+						</a>
+					</div>
+					<p>{p.title}</p>
+				</div>
+			</div>
+			<div class="right"></div>
+			<div class="top"></div>
+			</div>
+	{/each}
+</div>

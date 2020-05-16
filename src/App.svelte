@@ -1,7 +1,7 @@
 <style>
 	main {
 		padding: 1em;
-		max-width: 240px;
+		max-width: none;
 		margin: 0 auto;
 	}
 
@@ -12,26 +12,6 @@
 		font-weight: 100;
 	}
 
-	table {
-		margin: 10px 0 15px 0;
-		border-collapse: collapse;
-	}
-
-	td {
-		border: 1px solid #ddd;
-		padding: 3px 10px;
-	}
-
-	th {
-		border: 1px solid #ddd;
-		padding: 5px 10px;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
 </style>
 
 <script>
@@ -86,7 +66,6 @@
 		if (r) {
 			signedIn = true;
 			waiting = true
-			hot = await r.getHot();
 			waiting = false;
 		}
 	})
@@ -111,11 +90,6 @@
 	{:else if !signedIn}
 		<button on:click={login}>Login</button>
 	{:else}
-		<ul>
-			{#each hot as p, i}
-				<li>{p.title}</li>
-			{/each}
-
-		</ul>
+		<Content r={r}/>
 	{/if}
 </main>
