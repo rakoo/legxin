@@ -61,11 +61,12 @@
 
 	export let r;
 
-	let hot = [];
+	let posts = [];
 	let waiting = true;
 
 	onMount(async () => {
-		hot = await r.getHot();
+		const subreddit = new URL(window.location.href).searchParams.get("subreddit");
+		posts = await r.getHot(subreddit || '');
 		waiting = false;
 	})
 
@@ -82,7 +83,7 @@
 	{#if waiting}
 		<p>Loading...</p>
 	{:else}
-		{#each hot as p, i}
+		{#each posts as p, i}
 			<div class="item">
 				<div class=titlebar>/{p.subreddit_name_prefixed}/</div>
 				<div class=content>
