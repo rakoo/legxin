@@ -49,6 +49,7 @@
 		const code = new URL(window.location.href).searchParams.get('code')
 		// TODO: check state
 		if (code) { 
+			waiting = true
 			window.history.replaceState({}, document.title, "/");
 			const rr = await window.snoowrap.fromAuthCode({
 				code: code,
@@ -56,6 +57,7 @@
 				clientId: 'i4ji8frakYoSkw',
 				redirectUri: 'https://localhost:8000',
 			})
+			waiting = false
 
 			if (rr) {
 				window.localStorage.setItem('refreshToken', rr.refreshToken);
@@ -66,6 +68,7 @@
 			// Case 2: we already have a refresh token
 			const refreshToken = window.localStorage.getItem('refreshToken')
 			if (refreshToken) {
+				waiting = true
 				const rr = new window.snoowrap({
 					userAgent: 'snoowrap:github.com/rakoo/legin:v0.1 by /u/rakoo',
 					clientId: 'i4ji8frakYoSkw',
@@ -73,8 +76,7 @@
 					refreshToken: refreshToken
 				})
 
-				// Ping to make sure connection is on
-				await rr.getMe()
+				waiting = false
 				if (rr) {
 					r = rr
 				}
@@ -104,10 +106,10 @@
 
 <main>
 	<h1>Leĝin</h1>
-	{#if !signedIn}
-		<button on:click={login}>Login</button>
-	{:else if waiting}
+	{#if waiting}
 		<h2>Loading...</h2>
+	{:else if !signedIn}
+		<button on:click={login}>Login</button>
 	{:else}
 		<ul>
 			{#each hot as p, i}
