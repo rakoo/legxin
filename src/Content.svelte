@@ -5,62 +5,30 @@
 	}
 
 	.item {
-		position: relative;
-		margin: 0px auto;
+		height: 150px;
+		width: 400px;
 
-		display: grid;
-		grid-template-columns: 200px auto;
-	}
-
-	.front {
-		height: 300px;
+		margin-top: 10px;
 		color: #FFF;
 		margin: 10px;
-		text-align: center;
+		text-align: left;
 		font-size: 11px;
 		background-color: #111;
-		border: 3px solid #87CBD4;
+		border: 10px double #87CBD4;
 
 		grid-row-start: 2;
 		grid-row-end: 3;
 		grid-column-start: 1;
 		grid-column-end: 2;		
+
+		display: grid;
+		grid-template-columns: 150px auto;
+		align-items: center;
 	}
 
-	.right {
-		width: 10px;
-		height: 300px;
-		background-color: #111;
-		border: 3px solid #87CBD4;
-
-		grid-row-start: 2;
-		grid-row-end: 3;
-		grid-column-start: 2;
-		grid-column-end: 3;
-
-		transform: skew(0deg, -50deg) translate(-10px, -2px);
-		transform-origin: bottom left;
+	.item > * {
+		margin: 10px;
 	}
-	
-	.top {
-		height: 12.6px;
-		width: 174.2px;
-		background-color: #111;
-		border: 3px solid #87CBD4;
-
-		grid-row-start: 1;
-		grid-row-end: 2;
-		grid-column-start: 1;
-		grid-column-end: 2;
-
-		transform: skew(-40deg, 0deg) translate(18px, 9.7px);
-		transform-origin: bottom left;
-	}
-
-	.content {
-		margin-top: 10px;
-	}
-
 
 </style>
 
@@ -81,18 +49,12 @@
 <div class="flex-container">
 	{#each hot as p, i}
 		<div class="item">
-			<div class="front">
-				<div class="content">
-					<div>
-						<a href={p.url}>
-							<img src={p.thumbnail || ""} height={p.thumbnailHeight} width={p.thumbnailWidth} alt="">
-						</a>
-					</div>
-					<p>{p.title}</p>
-				</div>
+			<div>
+				<a href={p.url}>
+					<img src={p.thumbnail || ""} height={p.thumbnailHeight} width={p.thumbnailWidth} alt="">
+				</a>
 			</div>
-			<div class="right"></div>
-			<div class="top"></div>
-			</div>
+			<p>{p.title}</p>
+		</div>
 	{/each}
 </div>
