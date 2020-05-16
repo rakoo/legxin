@@ -20,7 +20,7 @@
 	import Content from './Content.svelte';
 
 	let signedIn = false;
-	let waiting = false;
+	let waiting = true;
 	let r;
 	let hot = [];
 
@@ -65,7 +65,6 @@
 
 		if (r) {
 			signedIn = true;
-			waiting = true
 			waiting = false;
 		}
 	})

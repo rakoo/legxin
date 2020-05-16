@@ -62,9 +62,11 @@
 	export let r;
 
 	let hot = [];
+	let waiting = true;
 
 	onMount(async () => {
 		hot = await r.getHot();
+		waiting = false;
 	})
 
 	function titleWithAuthor(post) {
@@ -77,16 +79,20 @@
 </script>
 
 <div class="flex-container">
-	{#each hot as p, i}
-		<div class="item">
-			<div class=titlebar>/{p.subreddit_name_prefixed}/</div>
-			<div class=content>
-				<a href={p.url}>
-					<img src={thumbnailOrLink(p)} height={p.thumbnailHeight} width={p.thumbnailWidth} alt="">
-				</a>
-				<p>{p.title}</p>
-				<p class="author">/u/{p.author.name}</p>
+	{#if waiting}
+		<p>Loading...</p>
+	{:else}
+		{#each hot as p, i}
+			<div class="item">
+				<div class=titlebar>/{p.subreddit_name_prefixed}/</div>
+				<div class=content>
+					<a href={p.url}>
+						<img src={thumbnailOrLink(p)} height={p.thumbnailHeight} width={p.thumbnailWidth} alt="">
+					</a>
+					<p>{p.title}</p>
+					<p class="author">/u/{p.author.name}</p>
+				</div>
 			</div>
-		</div>
-	{/each}
+		{/each}
+	{/if}
 </div>
