@@ -5,7 +5,7 @@
 	}
 
 	.item {
-		height: 260px;
+		height: 300px;
 		width: 400px;
 
 		margin-top: 10px;
@@ -32,7 +32,7 @@
 	}
 
 	.content {
-		height: 220px;
+		height: 260px;
 		display: grid;
 		grid-template-columns: 150px auto;
 		align-items: center;
