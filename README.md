@@ -57,3 +57,8 @@ You can click on a given subreddit to display submissions from there. As you can
 
 ## What's in a name
 Legxin is a ASCII-compliant spelling of leĝin, which is a contraction of "legis ĝin", which roughly translate to "[I] read it" in Esperanto. Naming is hard.
+
+## LICENSE
+Svelte, the main brick, is under [MIT](https://github.com/sveltejs/svelte/blob/master/LICENSE).
+
+The rest is under [CC0](https://creativecommons.org/share-your-work/public-domain/cc0/). Because works should benefit humanity by default, and yet public domain is not properly defined in a legal manner in many places.
