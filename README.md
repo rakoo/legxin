@@ -58,6 +58,8 @@ You can click on a given subreddit to display submissions from there. As you can
 ## What's in a name
 Legxin is a ASCII-compliant spelling of leĝin, which is a contraction of "legis ĝin", which roughly translate to "[I] read it" in Esperanto. Naming is hard.
 
+Pronunciation: [/lɛʤin/](https://translate.google.com/#view=home&op=translate&sl=auto&tl=en&text=le%C4%9Din)
+
 ## LICENSE
 Svelte, the main brick, is under [MIT](https://github.com/sveltejs/svelte/blob/master/LICENSE).
 
