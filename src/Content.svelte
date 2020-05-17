@@ -21,7 +21,7 @@
 
 		height: 90%;
 		display: grid;
-		grid-template-columns: 80px auto;
+		grid-template-columns: 150px auto;
 		align-items: center;
 	}
 
@@ -111,7 +111,7 @@
 			<div class="item">
 				<a href={p.url} class="thumbnail">
 					{#if p.has_thumbnail}
-						<img src={p.thumbnail} height={p.thumbnail_height/2} width={p.thumbnail_width/2} alt=""/>
+						<img src={p.thumbnail} height={p.thumbnail_height} width={p.thumbnail_width} alt=""/>
 					{:else}
 						*
 					{/if}
