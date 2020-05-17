@@ -3,15 +3,19 @@
 Legxin is an alternative UI for reddit. The goals are simple:
 
 - Make programming fun again
+
 I'm the number one user, so I need to enjoy doing and using this. If I don't (hint: if I need to implement something I'm not interested in) I will put the task lower in my todo stack
 
 - Teach me [svelte](https://svelte.dev/) and web technologies
+
 You can't be fullstack until you've succesfully centered a div. Also, svelte looks cool, so why not ?
 
 - Be lightweight on the network
+
 For some reason the standard UI (on old.reddit.com) retrieves ~1MB per page. Legxin uses the reddit API directly, so the data _should_ be smaller.
 
 - Have a different UI/UX
+
 I don't want to repeat standard themes of UI we have seen again and again and again, I want to do something different. Even though I'm no web designer, and that shows.
 If legxin has subtle tron-like resemblances, this is totally expected.
 
