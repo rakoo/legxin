@@ -2,28 +2,26 @@
 	.flex-container {
 		display: flex;
 		flex-wrap: wrap;
+		margin-left: 50px;
 	}
 
 	.item {
-		width: 600px;
+		width: 90%;
+		min-width: 400px;
 
-		margin-top: 10px;
 		margin: 10px;
 		text-align: left;
 		font-family: monospace;
 		font-size: 13px;
 		border: 3px solid #6FC3DF;
-		border-radius: 3px;
+		border-radius: 5px;
+		background-color: #070A0F;
 
 		display: grid;
 		grid-template-columns: auto;
 	}
 
-	.item:hover() {
-		border: 3px solid #E6FFFF;
-	}
-
-	.item:hover() .content {
+	.item:hover {
 		border: 3px solid #E6FFFF;
 	}
 
@@ -48,11 +46,16 @@
 	}
 
 	.content {
-		height: 160px;
+		height: 90%;
 		display: grid;
 		grid-template-columns: 150px auto;
 		align-items: center;
 		border: 1px solid #6FC3DF;
+		border-radius: 5px;
+	}
+
+	.item:hover .content {
+		border: 1px solid #E6FFFF;
 	}
 
 	.content > a {
@@ -112,12 +115,14 @@
 		{#each posts as p, i}
 			<div class="item">
 				<div class=titlebar>
-					<a href={linkForSubreddit(p.subreddit_name_prefixed)}>/{p.subreddit_name_prefixed}/</a>
+					<div>
+						<a href={linkForSubreddit(p.subreddit_name_prefixed)}>/{p.subreddit_name_prefixed}/</a>
+					</div>
 					<p class="flairs">{flairs(p)}</p>
 				</div>
 				<div class=content>
 					<a href={p.url}>
-						<img src={thumbnailOrLink(p)} height={p.thumbnailHeight} width={p.thumbnailWidth} alt="">
+						<img src={thumbnailOrLink(p)} height={p.thumbnail_height/2} width={p.thumbnail_width/2} alt="">
 					</a>
 					<p>{p.title}</p>
 					<p class="author">/u/{p.author.name}</p>
