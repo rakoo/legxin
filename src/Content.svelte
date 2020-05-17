@@ -12,60 +12,43 @@
 		margin: 10px;
 		text-align: left;
 		font-size: 18px;
-		border: 3px solid #6FC3DF;
+		border: 1px solid #6FC3DF;
 		border-radius: 5px;
 		background-color: #070A0F;
 
 		display: grid;
 		grid-template-columns: auto;
+
+		height: 90%;
+		display: grid;
+		grid-template-columns: 80px auto;
+		align-items: center;
 	}
 
 	.item:hover {
-		border: 3px solid #E6FFFF;
+		border: 1px solid #E6FFFF;
 	}
 
 	.item > * {
-		margin: 3px;
-	}
-
-	.titlebar {
-		font-weight: bold;
-		margin-bottom: 10px;
-		height: 12px;
-
-		display: grid;
-		grid-template-columns: auto auto;
-	}
-	.titlebar > * {
-		margin-top: 0px;
+		margin: 6px;
 	}
 
 	.flairs {
 		text-align: right;
 	}
 
-	.content {
-		height: 90%;
-		display: grid;
-		grid-template-columns: 150px auto;
-		align-items: center;
-		border: 1px solid #6FC3DF;
-		border-radius: 5px;
-	}
-
 	.item:hover .content {
 		border: 1px solid #E6FFFF;
 	}
 
-	.content > a {
+	.item > a {
 		grid-column-start: 1;
 		grid-column-end: 2;
 		grid-row-start: 1;
 		grid-row-end: 3;
-	}
 
-	.content > * {
-		margin: 10px;
+		display: grid;
+		align-items: center;
 	}
 
 	.author {
@@ -75,6 +58,9 @@
 
 	a {
 		color: #E6FFFF;
+	}
+	.thumbnail {
+		font-size:100px;
 	}
 
 </style>
@@ -91,12 +77,12 @@
 	onMount(async () => {
 		const subreddit = new URL(window.location.href).searchParams.get("subreddit");
 		posts = await r.getHot(subreddit || '');
+		posts = posts.map(p => {
+			p.has_thumbnail = p.thumbnail != "self" && p.thumbnail != "default" && p.thumbnail != "image"
+			return p;
+		})
 		waiting = false;
 	})
-
-	function thumbnailOrLink(post) {
-		return post.thumbnail == "self" || post.thumbnail == "default" || post.thumbnail == "image" ? "" : post.thumbnail
-	}
 
 	function flairs(post) {
 		console.log(post)
@@ -108,9 +94,11 @@
 	}
 
 	function creationTime(post) {
-		return moment.unix(post.created_utc)
-			.min() // If the time of the server is > our time, pick our time so we don't display "in 4 seconds"
-			.fromNow();
+		const m_server = moment.unix(post.created_utc)
+		const m_client = moment();
+
+		// If the time of the server is > our time, pick our time so we don't display "in 4 seconds"
+		return moment.min(m_server, m_client).fromNow();
 	}
 
 </script>
@@ -121,19 +109,15 @@
 	{:else}
 		{#each posts as p, i}
 			<div class="item">
-				<div class=titlebar>
-					<div>
-						<a href={linkForSubreddit(p.subreddit_name_prefixed)}>/{p.subreddit_name_prefixed}/</a>
-					</div>
-					<p class="flairs">{flairs(p)}</p>
-				</div>
-				<div class=content>
-					<a href={p.url}>
-						<img src={thumbnailOrLink(p)} height={p.thumbnail_height/2} width={p.thumbnail_width/2} alt="">
-					</a>
-					<p>{p.title}</p>
-					<p class="author">{creationTime(p)} by /u/{p.author.name}</p>
-				</div>
+				<a href={p.url} class="thumbnail">
+					{#if p.has_thumbnail}
+						<img src={p.thumbnail} height={p.thumbnail_height/2} width={p.thumbnail_width/2} alt=""/>
+					{:else}
+						*
+					{/if}
+				</a>
+				<p>{p.title}</p>
+				<p class="author">{creationTime(p)} by /u/{p.author.name} to <a href={linkForSubreddit(p.subreddit_name_prefixed)}>/{p.subreddit_name_prefixed}/</a></p>
 			</div>
 		{/each}
 	{/if}
