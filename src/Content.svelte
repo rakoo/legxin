@@ -11,8 +11,7 @@
 
 		margin: 10px;
 		text-align: left;
-		font-family: monospace;
-		font-size: 13px;
+		font-size: 18px;
 		border: 3px solid #6FC3DF;
 		border-radius: 5px;
 		background-color: #070A0F;
@@ -31,7 +30,7 @@
 
 	.titlebar {
 		font-weight: bold;
-		margin-top: 10px;
+		margin-bottom: 10px;
 		height: 12px;
 
 		display: grid;
