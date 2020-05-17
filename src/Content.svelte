@@ -5,21 +5,26 @@
 	}
 
 	.item {
-		height: 200;
 		width: 600px;
 
 		margin-top: 10px;
-		color: #FFF;
 		margin: 10px;
 		text-align: left;
 		font-family: monospace;
 		font-size: 13px;
-		background-color: #111;
-		border: 3px solid #87CBD4;
+		border: 3px solid #6FC3DF;
 		border-radius: 3px;
 
 		display: grid;
 		grid-template-columns: auto;
+	}
+
+	.item:hover() {
+		border: 3px solid #E6FFFF;
+	}
+
+	.item:hover() .content {
+		border: 3px solid #E6FFFF;
 	}
 
 	.item > * {
@@ -47,7 +52,7 @@
 		display: grid;
 		grid-template-columns: 150px auto;
 		align-items: center;
-		border: 1px solid #87CBD4;
+		border: 1px solid #6FC3DF;
 	}
 
 	.content > a {
@@ -63,6 +68,10 @@
 
 	.author {
 		text-align: right;
+	}
+
+	a {
+		color: #E6FFFF;
 	}
 
 </style>
@@ -89,6 +98,11 @@
 		console.log(post)
 		return post.link_flair_richtext.map(f => f.t).join(',').toUpperCase()
 	}
+
+	function linkForSubreddit(sr) {
+		return new URL('?subreddit=' + sr.split('/')[1], window.location).toString()
+	}
+
 </script>
 
 <div class="flex-container">
@@ -98,7 +112,7 @@
 		{#each posts as p, i}
 			<div class="item">
 				<div class=titlebar>
-					<p>/{p.subreddit_name_prefixed}/</p>
+					<a href={linkForSubreddit(p.subreddit_name_prefixed)}>/{p.subreddit_name_prefixed}/</a>
 					<p class="flairs">{flairs(p)}</p>
 				</div>
 				<div class=content>
