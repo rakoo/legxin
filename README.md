@@ -3,7 +3,7 @@
 Legxin is an alternative UI for reddit. The goals are simple:
 
 - Make programming fun again
-I need to enjoy doing this. If I don't (hint: if I need to implement something I'm not interested in) I will quickly lose interest in it.
+I'm the number one user, so I need to enjoy doing and using this. If I don't (hint: if I need to implement something I'm not interested in) I will put the task lower in my todo stack
 
 - Teach me [svelte](https://svelte.dev/) and web technologies
 You can't be fullstack until you've succesfully centered a div. Also, svelte looks cool, so why not ?
