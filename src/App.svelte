@@ -65,8 +65,8 @@
 
 		if (r) {
 			signedIn = true;
-			waiting = false;
 		}
+		waiting = false;
 	})
 
 	// Start the OAuth flow
