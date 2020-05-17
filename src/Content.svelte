@@ -70,6 +70,7 @@
 
 	.author {
 		text-align: right;
+		font-size: 12px;
 	}
 
 	a {
@@ -80,6 +81,7 @@
 
 <script>
 	import { onMount } from 'svelte';
+	import moment from 'moment';
 
 	export let r;
 
@@ -105,6 +107,12 @@
 		return new URL('?subreddit=' + sr.split('/')[1], window.location).toString()
 	}
 
+	function creationTime(post) {
+		return moment.unix(post.created_utc)
+			.min() // If the time of the server is > our time, pick our time so we don't display "in 4 seconds"
+			.fromNow();
+	}
+
 </script>
 
 <div class="flex-container">
@@ -124,7 +132,7 @@
 						<img src={thumbnailOrLink(p)} height={p.thumbnail_height/2} width={p.thumbnail_width/2} alt="">
 					</a>
 					<p>{p.title}</p>
-					<p class="author">/u/{p.author.name}</p>
+					<p class="author">{creationTime(p)} by /u/{p.author.name}</p>
 				</div>
 			</div>
 		{/each}
