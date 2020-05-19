@@ -13,8 +13,11 @@
 		text-align: left;
 		font-size: 18px;
 		border: 1px solid #6FC3DF;
+		border-bottom: 0px;
+		border-left: 0px;
 		border-radius: 5px;
 		background-color: #070A0F;
+		box-shadow: 0 0 6px #6FC3DF;
 
 		display: grid;
 		grid-template-columns: auto;
@@ -27,6 +30,9 @@
 
 	.item:hover {
 		border: 1px solid #E6FFFF;
+		border-bottom: 0px;
+		border-left: 0px;
+		box-shadow: 0 0 6px #E6FFFF;
 	}
 
 	.item > * {
