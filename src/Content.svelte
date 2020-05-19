@@ -69,29 +69,84 @@
 		font-size:100px;
 	}
 
+	.footer {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		align-items: center;
+		margin-top: 30px;
+	}
+
+	.button {
+		border: 3px solid #E6FFFF;
+		text-align: center;
+		width: 40%;
+		display: grid;
+		align-items: center;
+		height: 30px;
+		border-radius: 3px;
+		text-decoration: none;
+		box-shadow: 0 0 6px #E6FFFF;
+	}
+
+	.button:hover {
+		background-color: #E6FFFF;
+		color: #070A0F;
+		border-radius: 3px;
+		text-decoration: none;
+	}
+
+	.prev {
+		grid-column-start: 1;
+		grid-column-end: 2;
+		margin-left: 40%;
+	}
+
+	.next {
+		grid-column-start: 2;
+		grid-column-end: 3;
+		margin-left: 20%;
+	}
+
 </style>
 
 <script>
 	import { onMount } from 'svelte'
 	import moment from 'moment'
+	import { fly } from 'svelte/transition'
 
 	export let r
 
 	let posts = []
 	let waiting = true
+	let linkForPrev, linkForNext
+	let needPrev, needNext
 
 	onMount(async () => {
-		const subreddit = new URL(window.location.href).searchParams.get("subreddit");
-		posts = await r.getHot(subreddit || '');
-		posts = posts.map(p => {
+		const after = new URL(window.location.href).searchParams.get("after") || ""
+		const before = new URL(window.location.href).searchParams.get("before") || ""
+
+		waiting = true
+		posts = await r.getHot(getCurrentListingContext(), {after: after, before: before})
+		posts = addThumbnails(posts)
+		waiting = false
+
+		linkForPrev = link('prev')
+		linkForNext = link('next')
+		needPrev = posts.length > 0
+	})
+
+	function addThumbnails(posts) {
+		return posts.map(p => {
 			p.has_thumbnail = p.thumbnail != "self" && p.thumbnail != "default" && p.thumbnail != "image"
 			return p
 		})
-		waiting = false;
-	})
+	}
+
+	function getCurrentListingContext() {
+		return new URL(window.location.href).searchParams.get("subreddit") || ""
+	}
 
 	function flairs(post) {
-		console.log(post)
 		return post.link_flair_richtext.map(f => f.t).join(',').toUpperCase()
 	}
 
@@ -107,14 +162,36 @@
 		return moment.min(m_server, m_client).fromNow()
 	}
 
+	function flyIn() {
+		const after = new URL(window.location.href).searchParams.get("after") || ""
+		return {x: after ? 200 : -200, duration: 200}
+	}
+
+	function flyOut() {
+		const before = new URL(window.location.href).searchParams.get("before") || ""
+		return {x: before ? -200 : 200, duration: 200}
+	}
+
+	function link(prevOrNext) {
+		if (prevOrNext == 'prev') {
+			return posts.length > 0
+				? new URL('?before=' + posts[0].name, window.location)
+				: new URL('/', window.location)
+		} else if (prevOrNext == 'next') {
+			return posts.length == 25
+				? new URL('?after=' + posts[posts.length - 1].name, window.location)
+				: new URL('/', window.location)
+		}
+	}
+
 </script>
 
-<div class="flex-container">
-	{#if waiting}
-		<p>Loading...</p>
-	{:else}
+{#if waiting}
+	<p>Loading...</p>
+{:else}
+	<div class="flex-container">
 		{#each posts as p, i}
-			<div class="item">
+			<div class="item" in:fly="{flyIn()}" out:fly="{flyOut()}">
 				<a href={p.url} class="thumbnail">
 					{#if p.has_thumbnail}
 						<img src={p.thumbnail} height={p.thumbnail_height} width={p.thumbnail_width} alt=""/>
@@ -126,5 +203,12 @@
 				<p class="author">{creationTime(p)} by /u/{p.author.name} to <a href={linkForSubreddit(p.subreddit_name_prefixed)}>/{p.subreddit_name_prefixed}/</a></p>
 			</div>
 		{/each}
-	{/if}
-</div>
+	</div>
+
+	<div class="footer">
+		{#if needPrev}
+			<a class="button prev" href={linkForPrev}><b>Prev<b></a>
+		{/if}
+		<a class="button next" href={linkForNext}><b>Next<b></a>
+	</div>
+{/if}
