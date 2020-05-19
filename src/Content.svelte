@@ -2,11 +2,11 @@
 	.flex-container {
 		display: flex;
 		flex-wrap: wrap;
-		margin-left: 50px;
+		margin-left: 30px;
 	}
 
 	.item {
-		width: 90%;
+		width: 30%;
 		min-width: 400px;
 
 		margin: 10px;
