@@ -72,20 +72,20 @@
 </style>
 
 <script>
-	import { onMount } from 'svelte';
-	import moment from 'moment';
+	import { onMount } from 'svelte'
+	import moment from 'moment'
 
-	export let r;
+	export let r
 
-	let posts = [];
-	let waiting = true;
+	let posts = []
+	let waiting = true
 
 	onMount(async () => {
 		const subreddit = new URL(window.location.href).searchParams.get("subreddit");
 		posts = await r.getHot(subreddit || '');
 		posts = posts.map(p => {
 			p.has_thumbnail = p.thumbnail != "self" && p.thumbnail != "default" && p.thumbnail != "image"
-			return p;
+			return p
 		})
 		waiting = false;
 	})
@@ -101,10 +101,10 @@
 
 	function creationTime(post) {
 		const m_server = moment.unix(post.created_utc)
-		const m_client = moment();
+		const m_client = moment()
 
 		// If the time of the server is > our time, pick our time so we don't display "in 4 seconds"
-		return moment.min(m_server, m_client).fromNow();
+		return moment.min(m_server, m_client).fromNow()
 	}
 
 </script>
