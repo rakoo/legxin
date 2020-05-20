@@ -112,7 +112,7 @@
 <script>
 	import { onMount } from 'svelte'
 	import moment from 'moment'
-	import { fly } from 'svelte/transition'
+	import { fade } from 'svelte/transition'
 
 	export let r
 
@@ -120,7 +120,6 @@
 	let waiting = true
 	let linkForPrev, linkForNext
 	let showLinks
-	let clicked = 'next'
 
 	onMount(load)
 
@@ -165,14 +164,6 @@
 		return moment.min(m_server, m_client).fromNow()
 	}
 
-	function flyIn() {
-		return {x: clicked == 'next' ? 200 : -200, duration: 200}
-	}
-
-	function flyOut() {
-		return {x: clicked == 'next' ? -200 : 200, duration: 200}
-	}
-
 	function link(prevOrNext) {
 		if (posts.length == 0) return new URL('/', window.location)
 
@@ -184,21 +175,15 @@
 	}
 
 	function clickPrev() {
-		clicked = 'prev'
 		history.pushState('', '', link('prev'))
 		load()
 		return false
 	}
 
 	function clickNext() {
-		clicked = 'next'
 		history.pushState('', '', link('next'))
 		load()
 		return false
-	}
-
-	function popstate() {
-		console.log('pop')
 	}
 
 </script>
@@ -212,7 +197,7 @@
 {:else}
 	<div class="flex-container">
 		{#each posts as p, i}
-			<div class="item" in:fly="{flyIn()}" out:fly="{flyOut()}">
+			<div class="item" transition:fade="{{duration:100}}">
 				<a href={p.url} class="thumbnail">
 					{#if p.has_thumbnail}
 						<img src={p.thumbnail} height={p.thumbnail_height} width={p.thumbnail_width} alt=""/>
