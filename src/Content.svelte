@@ -119,9 +119,12 @@
 	let posts = []
 	let waiting = true
 	let linkForPrev, linkForNext
-	let needPrev, needNext
+	let showLinks
+	let clicked = 'next'
 
-	onMount(async () => {
+	onMount(load)
+
+	async function load() {
 		const after = new URL(window.location.href).searchParams.get("after") || ""
 		const before = new URL(window.location.href).searchParams.get("before") || ""
 
@@ -132,8 +135,8 @@
 
 		linkForPrev = link('prev')
 		linkForNext = link('next')
-		needPrev = posts.length > 0
-	})
+		showLinks = posts.length > 0
+	}
 
 	function addThumbnails(posts) {
 		return posts.map(p => {
@@ -163,31 +166,49 @@
 	}
 
 	function flyIn() {
-		const after = new URL(window.location.href).searchParams.get("after") || ""
-		return {x: after ? 200 : -200, duration: 200}
+		return {x: clicked == 'next' ? 200 : -200, duration: 200}
 	}
 
 	function flyOut() {
-		const before = new URL(window.location.href).searchParams.get("before") || ""
-		return {x: before ? -200 : 200, duration: 200}
+		return {x: clicked == 'next' ? -200 : 200, duration: 200}
 	}
 
 	function link(prevOrNext) {
+		if (posts.length == 0) return new URL('/', window.location)
+
 		if (prevOrNext == 'prev') {
-			return posts.length > 0
-				? new URL('?before=' + posts[0].name, window.location)
-				: new URL('/', window.location)
+			return new URL('?before=' + posts[0].name, window.location)
 		} else if (prevOrNext == 'next') {
-			return posts.length == 25
-				? new URL('?after=' + posts[posts.length - 1].name, window.location)
-				: new URL('/', window.location)
+			return new URL('?after=' + posts[posts.length - 1].name, window.location)
 		}
+	}
+
+	function clickPrev() {
+		clicked = 'prev'
+		history.pushState('', '', link('prev'))
+		load()
+		return false
+	}
+
+	function clickNext() {
+		clicked = 'next'
+		history.pushState('', '', link('next'))
+		load()
+		return false
+	}
+
+	function popstate() {
+		console.log('pop')
 	}
 
 </script>
 
+<svelte:window on:popstate={load}/>
+
 {#if waiting}
 	<p>Loading...</p>
+{:else if posts.length == 0}
+	<h1>Nothing!</h1>
 {:else}
 	<div class="flex-container">
 		{#each posts as p, i}
@@ -206,9 +227,9 @@
 	</div>
 
 	<div class="footer">
-		{#if needPrev}
-			<a class="button prev" href={linkForPrev}><b>Prev<b></a>
+		{#if showLinks}
+			<a class="button prev" href={linkForPrev} on:click|preventDefault={clickPrev}><b>Prev<b></a>
+			<a class="button next" href={linkForNext} on:click|preventDefault={clickNext}><b>Next<b></a>
 		{/if}
-		<a class="button next" href={linkForNext}><b>Next<b></a>
 	</div>
 {/if}
