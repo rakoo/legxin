@@ -137,7 +137,7 @@
 
 	function addThumbnails(posts) {
 		return posts.map(p => {
-			p.has_thumbnail = p.thumbnail != "self" && p.thumbnail != "default" && p.thumbnail != "image"
+			p.has_thumbnail = p.thumbnail != "self" && p.thumbnail != "default" && p.thumbnail != "image" && p.thumbnail != "nsfw"
 			return p
 		})
 	}
