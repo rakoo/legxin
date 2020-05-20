@@ -5,11 +5,12 @@
 		margin: 0 auto;
 	}
 
-	h1 {
+	.homelink {
 		color: #ff3e00;
 		text-transform: uppercase;
 		font-size: 4em;
 		font-weight: 100;
+		text-decoration: none;
 	}
 
 </style>
@@ -83,7 +84,7 @@
 </script>
 
 <main>
-	<h1>Leĝin</h1>
+	<a class="homelink" href="/">Leĝin</a>
 	{#if waiting}
 		<h2>Loading...</h2>
 	{:else if !signedIn}
